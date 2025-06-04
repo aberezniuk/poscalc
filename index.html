@@ -21,8 +21,8 @@
             <div class="form-group">
                 <label>Market Type</label>
                 <div class="toggle-group">
-                    <div class="toggle-btn active" onclick="setMarketType('fx')">Forex</div>
-                    <div class="toggle-btn" onclick="setMarketType('crypto')">Crypto</div>
+                    <div class="toggle-btn active">Forex</div>
+                    <div class="toggle-btn">Crypto</div>
                 </div>
             </div>
 
@@ -50,8 +50,8 @@
             <div class="form-group">
                 <label>Stop Loss Distance</label>
                 <div class="stop-loss-toggle">
-                    <button type="button" class="active" onclick="setStopLossType('pips')">Pips</button>
-                    <button type="button" onclick="setStopLossType('percentage')">Percentage</button>
+                    <button type="button" class="active">Pips</button>
+                    <button type="button">Percentage</button>
                 </div>
                 <div id="pipsInput">
                     <input type="number" id="stopLossPips" placeholder="20" step="0.1">
@@ -63,11 +63,11 @@
 
             <div class="form-group">
                 <label for="leverage">Leverage (Optional)</label>
-                <input type="number" id="leverage" placeholder="1" min="1" max="500" step="1" value="1" oninput="validateLeverage()">
+                <input type="number" id="leverage" placeholder="1" min="1" max="500" step="1" value="1">
                 <div class="error-hint" id="leverageError">Leverage must be between 1 and 500</div>
             </div>
 
-            <button class="calculate-btn" onclick="calculatePosition()">Calculate Position</button>
+            <button class="calculate-btn">Calculate Position</button>
 
             <div id="results" class="results hidden">
                 <div class="result-item">

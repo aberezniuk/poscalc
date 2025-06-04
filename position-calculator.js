@@ -165,8 +165,9 @@ function calculatePosition() {
     document.getElementById('results').classList.remove('hidden');
 }
 
-// Set default values for demonstration
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Set default values for demonstration
     document.getElementById('accountBalance').value = '10000';
     document.getElementById('riskPercent').value = '2';
     document.getElementById('entryPrice').value = '1.2345';
@@ -175,4 +176,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize with Forex selected
     setMarketType('fx');
+    
+    // Add event listeners for market type buttons
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+    toggleButtons.forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+            if (index === 0) {
+                setMarketType('fx');
+            } else {
+                setMarketType('crypto');
+            }
+        });
+    });
+    
+    // Add event listeners for stop loss type buttons
+    const stopLossButtons = document.querySelectorAll('.stop-loss-toggle button');
+    stopLossButtons.forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+            if (index === 0) {
+                setStopLossType('pips');
+            } else {
+                setStopLossType('percentage');
+            }
+        });
+    });
+    
+    // Add event listener for calculate button
+    const calculateBtn = document.querySelector('.calculate-btn');
+    calculateBtn.addEventListener('click', calculatePosition);
+    
+    // Add event listener for leverage validation
+    const leverageInput = document.getElementById('leverage');
+    leverageInput.addEventListener('input', validateLeverage);
 });
