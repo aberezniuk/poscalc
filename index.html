@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FX & Crypto Position Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="header">
+            <div class="header-text">
+                <h1>Position Calculator</h1>
+                <p>FX & Crypto Trading Tool</p>
+            </div>
+            <!-- Replace the base64 string below with your actual logo's base64 data -->
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="BS Legacy Logo" class="logo">
+        </div>
+        
+        <div class="form-container">
+            <div class="form-group">
+                <label>Market Type</label>
+                <div class="toggle-group">
+                    <div class="toggle-btn active" onclick="setMarketType('fx')">Forex</div>
+                    <div class="toggle-btn" onclick="setMarketType('crypto')">Crypto</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="accountBalance">Account Balance</label>
+                    <input type="number" id="accountBalance" placeholder="10000" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="riskPercent">Risk %</label>
+                    <input type="number" id="riskPercent" placeholder="2" step="0.1" max="100">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="entryPrice">Entry Price</label>
+                <input type="number" id="entryPrice" placeholder="1.2345" step="0.00001">
+            </div>
+
+            <div class="form-group" id="lotSizeGroup">
+                <label for="lotSize">Lot Size (Forex only)</label>
+                <input type="number" id="lotSize" placeholder="100000" step="1000">
+            </div>
+
+            <div class="form-group">
+                <label>Stop Loss Distance</label>
+                <div class="stop-loss-toggle">
+                    <button type="button" class="active" onclick="setStopLossType('pips')">Pips</button>
+                    <button type="button" onclick="setStopLossType('percentage')">Percentage</button>
+                </div>
+                <div id="pipsInput">
+                    <input type="number" id="stopLossPips" placeholder="20" step="0.1">
+                </div>
+                <div id="percentageInput" class="hidden">
+                    <input type="number" id="stopLossPercent" placeholder="1.5" step="0.1">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="leverage">Leverage (Optional)</label>
+                <input type="number" id="leverage" placeholder="1" min="1" max="500" step="1" value="1" oninput="validateLeverage()">
+                <div class="error-hint" id="leverageError">Leverage must be between 1 and 500</div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculatePosition()">Calculate Position</button>
+
+            <div id="results" class="results hidden">
+                <div class="result-item">
+                    <span class="result-label">Position Size</span>
+                    <span class="result-value" id="positionSize">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Risk Amount</span>
+                    <span class="result-value" id="riskAmount">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Stop Loss Price</span>
+                    <span class="result-value" id="stopLossPrice">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Required Margin</span>
+                    <span class="result-value" id="requiredMargin">-</span>
+                </div>
+                
+                <div class="highlight">
+                    <div class="result-item">
+                        <span class="result-label">Units to Trade</span>
+                        <span class="result-value" id="unitsToTrade">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
