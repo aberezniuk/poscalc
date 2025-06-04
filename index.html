@@ -4,7 +4,254 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FX & Crypto Position Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: transparent;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .calculator {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0A0807 0%, #1a1a1a 100%);
+            color: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+            color: white;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+            margin-left: 15px;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #0A0807;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            color: #0A0807;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #FFFF65;
+            box-shadow: 0 0 0 3px rgba(255, 255, 101, 0.2);
+        }
+
+        .form-group input.error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .error-hint {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-hint.show {
+            display: block;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #0A0807;
+        }
+
+        .toggle-btn.active {
+            background: #FFFF65;
+            color: #0A0807;
+            border-color: #FFFF65;
+        }
+
+        .toggle-btn:hover {
+            border-color: #FFFF65;
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0A0807 0%, #2c2c2c 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(10, 8, 7, 0.3);
+            background: linear-gradient(135deg, #FFFF65 0%, #e6e600 100%);
+            color: #0A0807;
+        }
+
+        .results {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #0A0807;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #0A0807;
+            font-size: 16px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #0A0807 0%, #2c2c2c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 2px solid #FFFF65;
+        }
+
+        .highlight .result-item {
+            border-bottom: 1px solid rgba(255, 255, 101, 0.3);
+            color: white;
+        }
+
+        .highlight .result-label,
+        .highlight .result-value {
+            color: white;
+        }
+
+        .stop-loss-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stop-loss-toggle button {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            color: #0A0807;
+        }
+
+        .stop-loss-toggle button.active {
+            background: #FFFF65;
+            color: #0A0807;
+            border-color: #FFFF65;
+        }
+
+        .stop-loss-toggle button:hover {
+            border-color: #FFFF65;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="calculator">
@@ -13,7 +260,6 @@
                 <h1>Position Calculator</h1>
                 <p>FX & Crypto Trading Tool</p>
             </div>
-            <!-- Replace the base64 string below with your actual logo's base64 data -->
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="BS Legacy Logo" class="logo">
         </div>
         
@@ -21,40 +267,40 @@
             <div class="form-group">
                 <label>Market Type</label>
                 <div class="toggle-group">
-                    <div class="toggle-btn active">Forex</div>
-                    <div class="toggle-btn">Crypto</div>
+                    <div class="toggle-btn active" data-type="fx">Forex</div>
+                    <div class="toggle-btn" data-type="crypto">Crypto</div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group">
                     <label for="accountBalance">Account Balance</label>
-                    <input type="number" id="accountBalance" placeholder="10000" step="0.01">
+                    <input type="number" id="accountBalance" placeholder="10000" step="0.01" value="10000">
                 </div>
                 <div class="form-group">
                     <label for="riskPercent">Risk %</label>
-                    <input type="number" id="riskPercent" placeholder="2" step="0.1" max="100">
+                    <input type="number" id="riskPercent" placeholder="2" step="0.1" max="100" value="2">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="entryPrice">Entry Price</label>
-                <input type="number" id="entryPrice" placeholder="1.2345" step="0.00001">
+                <input type="number" id="entryPrice" placeholder="1.2345" step="0.00001" value="1.2345">
             </div>
 
             <div class="form-group" id="lotSizeGroup">
                 <label for="lotSize">Lot Size (Forex only)</label>
-                <input type="number" id="lotSize" placeholder="100000" step="1000">
+                <input type="number" id="lotSize" placeholder="100000" step="1000" value="100000">
             </div>
 
             <div class="form-group">
                 <label>Stop Loss Distance</label>
                 <div class="stop-loss-toggle">
-                    <button type="button" class="active">Pips</button>
-                    <button type="button">Percentage</button>
+                    <button type="button" class="active" data-type="pips">Pips</button>
+                    <button type="button" data-type="percentage">Percentage</button>
                 </div>
                 <div id="pipsInput">
-                    <input type="number" id="stopLossPips" placeholder="20" step="0.1">
+                    <input type="number" id="stopLossPips" placeholder="20" step="0.1" value="20">
                 </div>
                 <div id="percentageInput" class="hidden">
                     <input type="number" id="stopLossPercent" placeholder="1.5" step="0.1">
@@ -67,7 +313,7 @@
                 <div class="error-hint" id="leverageError">Leverage must be between 1 and 500</div>
             </div>
 
-            <button class="calculate-btn">Calculate Position</button>
+            <button class="calculate-btn" id="calculateBtn">Calculate Position</button>
 
             <div id="results" class="results hidden">
                 <div class="result-item">
@@ -97,6 +343,218 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        let marketType = 'fx';
+        let stopLossType = 'pips';
+
+        function setMarketType(type) {
+            marketType = type;
+            
+            // Update button states
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.type === type) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Show/hide lot size input
+            const lotSizeGroup = document.getElementById('lotSizeGroup');
+            if (type === 'fx') {
+                lotSizeGroup.style.display = 'block';
+            } else {
+                lotSizeGroup.style.display = 'none';
+            }
+        }
+
+        function setStopLossType(type) {
+            stopLossType = type;
+            
+            // Update button states
+            document.querySelectorAll('.stop-loss-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.type === type) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Show/hide inputs
+            const pipsInput = document.getElementById('pipsInput');
+            const percentageInput = document.getElementById('percentageInput');
+            
+            if (type === 'pips') {
+                pipsInput.classList.remove('hidden');
+                percentageInput.classList.add('hidden');
+            } else {
+                pipsInput.classList.add('hidden');
+                percentageInput.classList.remove('hidden');
+            }
+        }
+
+        function validateLeverage() {
+            const leverageInput = document.getElementById('leverage');
+            const leverageError = document.getElementById('leverageError');
+            const value = parseInt(leverageInput.value);
+            
+            if (isNaN(value) || value < 1 || value > 500) {
+                leverageInput.classList.add('error');
+                leverageError.classList.add('show');
+            } else {
+                leverageInput.classList.remove('error');
+                leverageError.classList.remove('show');
+            }
+        }
+
+        function calculatePosition() {
+            const accountBalance = parseFloat(document.getElementById('accountBalance').value) || 0;
+            const riskPercent = parseFloat(document.getElementById('riskPercent').value) || 0;
+            const leverageValue = parseInt(document.getElementById('leverage').value) || 1;
+            const entryPrice = parseFloat(document.getElementById('entryPrice').value) || 0;
+            
+            // Validate leverage
+            if (leverageValue < 1 || leverageValue > 500) {
+                alert('Please enter a valid leverage value between 1 and 500');
+                return;
+            }
+            
+            // Calculate risk amount in dollars
+            const riskAmount = accountBalance * (riskPercent / 100);
+            
+            let positionSize = 0;
+            let stopLossPrice = 0;
+            let requiredMargin = 0;
+            let unitsToTrade = 0;
+            
+            if (marketType === 'fx') {
+                // Forex calculations
+                const lotSize = parseFloat(document.getElementById('lotSize').value) || 100000;
+                
+                let stopLossDistanceInPips = 0;
+                
+                if (stopLossType === 'pips') {
+                    stopLossDistanceInPips = parseFloat(document.getElementById('stopLossPips').value) || 0;
+                } else {
+                    const percent = parseFloat(document.getElementById('stopLossPercent').value) || 0;
+                    stopLossDistanceInPips = (percent / 100) * 10000;
+                }
+                
+                if (!accountBalance || !riskPercent || !stopLossDistanceInPips || !lotSize) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                const pipValue = 0.0001 * lotSize;
+                const maxLots = riskAmount / (stopLossDistanceInPips * pipValue);
+                
+                unitsToTrade = Math.floor(maxLots * 100) / 100;
+                positionSize = unitsToTrade * lotSize;
+                requiredMargin = positionSize / leverageValue;
+                
+                if (entryPrice > 0) {
+                    const pipDistance = stopLossDistanceInPips * 0.0001;
+                    const stopLossPrice_calc = entryPrice - pipDistance;
+                    stopLossPrice = `${stopLossPrice_calc.toFixed(5)} (${stopLossDistanceInPips} pips)`;
+                } else {
+                    stopLossPrice = `${stopLossDistanceInPips} pips`;
+                }
+                
+            } else {
+                // Crypto calculations
+                let stopLossDistancePercent = 0;
+                
+                if (stopLossType === 'pips') {
+                    const pips = parseFloat(document.getElementById('stopLossPips').value) || 0;
+                    stopLossDistancePercent = pips * 0.01;
+                } else {
+                    stopLossDistancePercent = parseFloat(document.getElementById('stopLossPercent').value) || 0;
+                }
+                
+                if (!accountBalance || !riskPercent || !stopLossDistancePercent) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                const dollarRiskPerUnit = riskAmount / (stopLossDistancePercent / 100);
+                
+                if (entryPrice > 0) {
+                    unitsToTrade = dollarRiskPerUnit / entryPrice;
+                    positionSize = unitsToTrade * entryPrice;
+                } else {
+                    unitsToTrade = dollarRiskPerUnit;
+                    positionSize = dollarRiskPerUnit;
+                }
+                
+                requiredMargin = positionSize / leverageValue;
+                
+                if (entryPrice > 0) {
+                    const stopLossPrice_calc = entryPrice * (1 - stopLossDistancePercent / 100);
+                    stopLossPrice = stopLossPrice_calc.toFixed(5);
+                } else {
+                    stopLossPrice = `${stopLossDistancePercent}% below entry`;
+                }
+            }
+            
+            // Display results
+            if (marketType === 'fx') {
+                document.getElementById('positionSize').textContent = `${positionSize.toFixed(0)} units`;
+            } else {
+                document.getElementById('positionSize').textContent = `$${positionSize.toFixed(2)}`;
+            }
+            
+            document.getElementById('riskAmount').textContent = `$${riskAmount.toFixed(2)}`;
+            document.getElementById('stopLossPrice').textContent = stopLossPrice;
+            document.getElementById('requiredMargin').textContent = `$${requiredMargin.toFixed(2)}`;
+            
+            if (marketType === 'fx') {
+                document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(2)} lots`;
+            } else {
+                if (entryPrice > 0) {
+                    document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(8)} units`;
+                } else {
+                    document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(2)} (need entry price for units)`;
+                }
+            }
+            
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up event listeners...');
+            
+            // Market type toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    console.log('Market type clicked:', this.dataset.type);
+                    setMarketType(this.dataset.type);
+                });
+            });
+            
+            // Stop loss toggle buttons
+            document.querySelectorAll('.stop-loss-toggle button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    console.log('Stop loss type clicked:', this.dataset.type);
+                    setStopLossType(this.dataset.type);
+                });
+            });
+            
+            // Calculate button
+            const calculateBtn = document.getElementById('calculateBtn');
+            calculateBtn.addEventListener('click', function() {
+                console.log('Calculate button clicked');
+                calculatePosition();
+            });
+            
+            // Leverage validation
+            const leverageInput = document.getElementById('leverage');
+            leverageInput.addEventListener('input', validateLeverage);
+            
+            // Initialize
+            setMarketType('fx');
+            setStopLossType('pips');
+            
+            console.log('All event listeners set up');
+        });
+    </script>
 </body>
 </html>
