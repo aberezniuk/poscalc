@@ -260,7 +260,7 @@
                 <h1>Position Calculator</h1>
                 <p>FX & Crypto Trading Tool</p>
             </div>
-            <img src="logo.png" alt="BS Legacy Logo" class="logo">
+            <img src="bs_legacy_logo.png" alt="BS Legacy Logo" class="logo">
         </div>
         
         <div class="form-container">
@@ -482,9 +482,13 @@
                 
                 if (entryPrice > 0) {
                     unitsToTrade = dollarRiskPerUnit / entryPrice;
+                    // Round down for crypto units to avoid exceeding risk
+                    unitsToTrade = Math.floor(unitsToTrade * 100) / 100;
                     positionSize = unitsToTrade * entryPrice;
                 } else {
                     unitsToTrade = dollarRiskPerUnit;
+                    // Round down for crypto units to avoid exceeding risk
+                    unitsToTrade = Math.floor(unitsToTrade * 100) / 100;
                     positionSize = dollarRiskPerUnit;
                 }
                 
@@ -492,7 +496,7 @@
                 
                 if (entryPrice > 0) {
                     const stopLossPrice_calc = entryPrice * (1 - stopLossDistancePercent / 100);
-                    stopLossPrice = stopLossPrice_calc.toFixed(5);
+                    stopLossPrice = stopLossPrice_calc.toFixed(2);
                 } else {
                     stopLossPrice = `${stopLossDistancePercent}% below entry`;
                 }
@@ -513,7 +517,7 @@
                 document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(2)} lots`;
             } else {
                 if (entryPrice > 0) {
-                    document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(8)} units`;
+                    document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(2)} units`;
                 } else {
                     document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(2)} (need entry price for units)`;
                 }
