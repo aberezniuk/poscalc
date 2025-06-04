@@ -260,7 +260,7 @@
                 <h1>Position Calculator</h1>
                 <p>FX & Crypto Trading Tool</p>
             </div>
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" alt="BS Legacy Logo" class="logo">
+            <img src="logo.png" alt="BS Legacy Logo" class="logo">
         </div>
         
         <div class="form-container">
@@ -453,9 +453,13 @@
                 if (entryPrice > 0) {
                     const pipDistance = stopLossDistanceInPips * 0.0001;
                     const stopLossPrice_calc = entryPrice - pipDistance;
-                    stopLossPrice = `${stopLossPrice_calc.toFixed(5)} (${stopLossDistanceInPips} pips)`;
+                    // Fix: Round pips to 1 decimal place
+                    const roundedPips = Math.round(stopLossDistanceInPips * 10) / 10;
+                    stopLossPrice = `${stopLossPrice_calc.toFixed(5)} (${roundedPips} pips)`;
                 } else {
-                    stopLossPrice = `${stopLossDistanceInPips} pips`;
+                    // Fix: Round pips to 1 decimal place
+                    const roundedPips = Math.round(stopLossDistanceInPips * 10) / 10;
+                    stopLossPrice = `${roundedPips} pips`;
                 }
                 
             } else {
