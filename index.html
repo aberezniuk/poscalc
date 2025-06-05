@@ -223,39 +223,9 @@
             color: white;
         }
 
-        .stop-loss-toggle {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .stop-loss-toggle button {
-            flex: 1;
-            padding: 5px 8px;
-            border: 1px solid #dee2e6;
-            background: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.3s ease;
-            color: #0A0807;
-        }
-
-        .stop-loss-toggle button.active {
-            background: #FFFF65;
-            color: #0A0807;
-            border-color: #FFFF65;
-        }
-
-        .stop-loss-toggle button:hover {
-            border-color: #FFFF65;
-        }
-
         .hidden {
             display: none;
         }
-
-        /* Remove scrollbar styling since no longer needed */
     </style>
 </head>
 <body>
@@ -299,17 +269,8 @@
             </div>
 
             <div class="form-group">
-                <label>Stop Loss Distance</label>
-                <div class="stop-loss-toggle">
-                    <button type="button" class="active" data-type="pips">Pips</button>
-                    <button type="button" data-type="percentage">Percentage</button>
-                </div>
-                <div id="pipsInput">
-                    <input type="number" id="stopLossPips" placeholder="20" step="0.1">
-                </div>
-                <div id="percentageInput" class="hidden">
-                    <input type="number" id="stopLossPercent" placeholder="1.5" step="0.1">
-                </div>
+                <label for="stopLossPercent">Stop Loss Distance (%)</label>
+                <input type="number" id="stopLossPercent" placeholder="1.5" step="0.1">
             </div>
 
             <div class="form-group">
@@ -350,7 +311,6 @@
 
     <script>
         let marketType = 'fx';
-        let stopLossType = 'pips';
 
         function setMarketType(type) {
             marketType = type;
@@ -369,30 +329,6 @@
                 lotSizeGroup.style.display = 'block';
             } else {
                 lotSizeGroup.style.display = 'none';
-            }
-        }
-
-        function setStopLossType(type) {
-            stopLossType = type;
-            
-            // Update button states
-            document.querySelectorAll('.stop-loss-toggle button').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.type === type) {
-                    btn.classList.add('active');
-                }
-            });
-            
-            // Show/hide inputs
-            const pipsInput = document.getElementById('pipsInput');
-            const percentageInput = document.getElementById('percentageInput');
-            
-            if (type === 'pips') {
-                pipsInput.classList.remove('hidden');
-                percentageInput.classList.add('hidden');
-            } else {
-                pipsInput.classList.add('hidden');
-                percentageInput.classList.remove('hidden');
             }
         }
 
@@ -415,6 +351,7 @@
             const riskPercent = parseFloat(document.getElementById('riskPercent').value) || 0;
             const leverageValue = parseInt(document.getElementById('leverage').value) || 1;
             const entryPrice = parseFloat(document.getElementById('entryPrice').value) || 0;
+            const stopLossPercent = parseFloat(document.getElementById('stopLossPercent').value) || 0;
             
             // Validate leverage
             if (leverageValue < 1 || leverageValue > 500) {
@@ -434,16 +371,10 @@
                 // Forex calculations
                 const lotSize = parseFloat(document.getElementById('lotSize').value) || 100000;
                 
-                let stopLossDistanceInPips = 0;
+                // Convert percentage to pips for forex (assuming 1% = 100 pips)
+                const stopLossDistanceInPips = stopLossPercent * 100;
                 
-                if (stopLossType === 'pips') {
-                    stopLossDistanceInPips = parseFloat(document.getElementById('stopLossPips').value) || 0;
-                } else {
-                    const percent = parseFloat(document.getElementById('stopLossPercent').value) || 0;
-                    stopLossDistanceInPips = (percent / 100) * 10000;
-                }
-                
-                if (!accountBalance || !riskPercent || !stopLossDistanceInPips || !lotSize) {
+                if (!accountBalance || !riskPercent || !stopLossPercent || !lotSize) {
                     alert('Please fill in all required fields');
                     return;
                 }
@@ -458,32 +389,21 @@
                 if (entryPrice > 0) {
                     const pipDistance = stopLossDistanceInPips * 0.0001;
                     const stopLossPrice_calc = entryPrice - pipDistance;
-                    // Fix: Round pips to 1 decimal place
                     const roundedPips = Math.round(stopLossDistanceInPips * 10) / 10;
                     stopLossPrice = `${stopLossPrice_calc.toFixed(2)} (${roundedPips} pips)`;
                 } else {
-                    // Fix: Round pips to 1 decimal place
                     const roundedPips = Math.round(stopLossDistanceInPips * 10) / 10;
                     stopLossPrice = `${roundedPips} pips`;
                 }
                 
             } else {
                 // Crypto calculations
-                let stopLossDistancePercent = 0;
-                
-                if (stopLossType === 'pips') {
-                    const pips = parseFloat(document.getElementById('stopLossPips').value) || 0;
-                    stopLossDistancePercent = pips * 0.01;
-                } else {
-                    stopLossDistancePercent = parseFloat(document.getElementById('stopLossPercent').value) || 0;
-                }
-                
-                if (!accountBalance || !riskPercent || !stopLossDistancePercent) {
+                if (!accountBalance || !riskPercent || !stopLossPercent) {
                     alert('Please fill in all required fields');
                     return;
                 }
                 
-                const dollarRiskPerUnit = riskAmount / (stopLossDistancePercent / 100);
+                const dollarRiskPerUnit = riskAmount / (stopLossPercent / 100);
                 
                 if (entryPrice > 0) {
                     unitsToTrade = dollarRiskPerUnit / entryPrice;
@@ -500,10 +420,10 @@
                 requiredMargin = positionSize / leverageValue;
                 
                 if (entryPrice > 0) {
-                    const stopLossPrice_calc = entryPrice * (1 - stopLossDistancePercent / 100);
+                    const stopLossPrice_calc = entryPrice * (1 - stopLossPercent / 100);
                     stopLossPrice = stopLossPrice_calc.toFixed(2);
                 } else {
-                    stopLossPrice = `${stopLossDistancePercent}% below entry`;
+                    stopLossPrice = `${stopLossPercent}% below entry`;
                 }
             }
             
@@ -543,14 +463,6 @@
                 });
             });
             
-            // Stop loss toggle buttons
-            document.querySelectorAll('.stop-loss-toggle button').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    console.log('Stop loss type clicked:', this.dataset.type);
-                    setStopLossType(this.dataset.type);
-                });
-            });
-            
             // Calculate button
             const calculateBtn = document.getElementById('calculateBtn');
             calculateBtn.addEventListener('click', function() {
@@ -564,7 +476,6 @@
             
             // Initialize
             setMarketType('fx');
-            setStopLossType('pips');
             
             console.log('All event listeners set up');
         });
