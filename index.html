@@ -428,11 +428,11 @@
             }
             
             // Display results
-            if (marketType === 'fx') {
-                document.getElementById('positionSize').textContent = `$${positionSize.toFixed(0)}`;
-            } else {
+            //if (marketType === 'fx') {
+                //document.getElementById('positionSize').textContent = `$${positionSize.toFixed(2)}`;
+            //} else {
                 document.getElementById('positionSize').textContent = `$${positionSize.toFixed(2)}`;
-            }
+            //}
             
             document.getElementById('riskAmount').textContent = `$${riskAmount.toFixed(2)}`;
             document.getElementById('stopLossPrice').textContent = stopLossPrice;
@@ -444,7 +444,7 @@
                 if (entryPrice > 0) {
                     document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(2)} units`;
                 } else {
-                    document.getElementById('unitsToTrade').textContent = `${unitsToTrade.toFixed(2)} (need entry price for units)`;
+                    document.getElementById('unitsToTrade').textContent = `(need entry price for units)`;
                 }
             }
             
