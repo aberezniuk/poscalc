@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: transparent;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
 
         .calculator {
@@ -31,7 +31,7 @@
         .header {
             background: linear-gradient(135deg, #0A0807 0%, #1a1a1a 100%);
             color: white;
-            padding: 25px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -42,47 +42,47 @@
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
             color: white;
         }
 
         .header p {
             opacity: 0.9;
-            font-size: 14px;
+            font-size: 12px;
             color: white;
         }
 
         .logo {
-            height: 50px;
+            height: 40px;
             width: auto;
             margin-left: 15px;
         }
 
         .form-container {
-            padding: 30px;
+            padding: 18px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #0A0807;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 12px 15px;
+            padding: 8px 10px;
             border: 2px solid #e9ecef;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 14px;
             transition: all 0.3s ease;
             background: white;
             color: #0A0807;
@@ -102,8 +102,8 @@
 
         .error-hint {
             color: #e74c3c;
-            font-size: 12px;
-            margin-top: 5px;
+            font-size: 11px;
+            margin-top: 4px;
             display: none;
         }
 
@@ -113,19 +113,20 @@
 
         .toggle-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .toggle-btn {
             flex: 1;
-            padding: 10px;
+            padding: 6px;
             border: 2px solid #e9ecef;
             background: white;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
             text-align: center;
             font-weight: 600;
+            font-size: 12px;
             transition: all 0.3s ease;
             color: #0A0807;
         }
@@ -142,7 +143,7 @@
 
         .row {
             display: flex;
-            gap: 15px;
+            gap: 12px;
         }
 
         .row .form-group {
@@ -151,16 +152,16 @@
 
         .calculate-btn {
             width: 100%;
-            padding: 15px;
+            padding: 10px;
             background: linear-gradient(135deg, #0A0807 0%, #2c2c2c 100%);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .calculate-btn:hover {
@@ -171,10 +172,10 @@
         }
 
         .results {
-            margin-top: 25px;
-            padding: 20px;
+            margin-top: 12px;
+            padding: 12px;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 15px;
+            border-radius: 8px;
             border: 2px solid #e9ecef;
         }
 
@@ -182,7 +183,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 6px 0;
             border-bottom: 1px solid #dee2e6;
         }
 
@@ -193,26 +194,28 @@
         .result-label {
             font-weight: 600;
             color: #0A0807;
+            font-size: 13px;
         }
 
         .result-value {
             font-weight: 700;
             color: #0A0807;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .highlight {
             background: linear-gradient(135deg, #0A0807 0%, #2c2c2c 100%);
             color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 8px;
             border: 2px solid #FFFF65;
         }
 
         .highlight .result-item {
             border-bottom: 1px solid rgba(255, 255, 101, 0.3);
             color: white;
+            padding: 4px 0;
         }
 
         .highlight .result-label,
@@ -222,18 +225,18 @@
 
         .stop-loss-toggle {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .stop-loss-toggle button {
             flex: 1;
-            padding: 8px 12px;
+            padding: 5px 8px;
             border: 1px solid #dee2e6;
             background: white;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 10px;
             transition: all 0.3s ease;
             color: #0A0807;
         }
@@ -251,6 +254,8 @@
         .hidden {
             display: none;
         }
+
+        /* Remove scrollbar styling since no longer needed */
     </style>
 </head>
 <body>
@@ -455,7 +460,7 @@
                     const stopLossPrice_calc = entryPrice - pipDistance;
                     // Fix: Round pips to 1 decimal place
                     const roundedPips = Math.round(stopLossDistanceInPips * 10) / 10;
-                    stopLossPrice = `${stopLossPrice_calc.toFixed(5)} (${roundedPips} pips)`;
+                    stopLossPrice = `${stopLossPrice_calc.toFixed(2)} (${roundedPips} pips)`;
                 } else {
                     // Fix: Round pips to 1 decimal place
                     const roundedPips = Math.round(stopLossDistanceInPips * 10) / 10;
